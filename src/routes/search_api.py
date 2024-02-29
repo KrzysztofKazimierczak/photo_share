@@ -8,3 +8,7 @@ app = FastAPI()
 @app.get("/search/pictures")
 async def search_pictures_endpoint(query: str, tags: List[str] = None, rating: int = None, date_added: datetime = None):
     pass
+
+@app.get("/search/users")
+async def search_users_endpoint(query: str, tags: List[str] = None, rating: int = None, date_added: datetime = None):
+    pass
