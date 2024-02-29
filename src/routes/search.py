@@ -25,6 +25,15 @@ def search(query: str, model: Base, fields: List[str]) -> List[Base]: # type: ig
 
 
 def search_pictures(keywords_or_tags: List[str]) -> List[Picture]:
+    """
+    Searches for pictures that match the given keywords or tags.
+
+    Args:
+        keywords_or_tags (List[str]): A list of keywords or tags to search for.
+
+    Returns:
+        List[Picture]: A list of pictures that match the search criteria.
+    """
     return search(query=' '.join(keywords_or_tags), model=Picture, fields=('tags.name', 'description'))
     
 
