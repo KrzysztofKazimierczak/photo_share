@@ -12,3 +12,7 @@ async def search_pictures_endpoint(query: str, tags: List[str] = None, rating: i
 @app.get("/search/users")
 async def search_users_endpoint(query: str, tags: List[str] = None, rating: int = None, date_added: datetime = None):
     pass
+
+@app.get("/search/comments")
+async def search_comments_endpoint(query: str, tags: List[str] = None, rating: int = None, date_added: datetime = None):
+    pass
