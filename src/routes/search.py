@@ -38,6 +38,15 @@ def search_pictures(keywords_or_tags: List[str]) -> List[Picture]:
     
 
 def search_users(keywords: List[str]) -> List[User]:
+    """
+    Searches for users that match the given keywords.
+
+    Args:
+        keywords (List[str]): A list of keywords to search for.
+
+    Returns:
+        List[User]: A list of users that match the search criteria.
+    """
     return search(query=' '.join(keywords), model=User, fields=('username', 'email'))
 
 
