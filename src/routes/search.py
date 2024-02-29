@@ -6,6 +6,17 @@ from datetime import datetime
 
 #Mother Function
 def search(query: str, model: Base, fields: List[str]) -> List[Base]: # type: ignore
+    """
+    Searches for records in the given model that match the provided query string.
+
+    Args:
+        query (str): The query string to search for.
+        model (Base): The SQLAlchemy model to search in.
+        fields (Tuple[str, ...]): The fields of the model to search in.
+
+    Returns:
+        List[model]: A list of records that match the search criteria.
+    """
     query_parts = query.split()
     query = model.query
     for query_part in query_parts:
