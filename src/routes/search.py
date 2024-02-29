@@ -51,7 +51,15 @@ def search_users(keywords: List[str]) -> List[User]:
 
 
 def search_users_with_photos(query: str = '', picture_ids: List[int] = None) -> List[User]:
-    pass
+    query_params = {'username': query} if query else {}
+    users = search_users(**query_params)
+
+    if picture_ids:
+        pictures = search_pictures(ids=picture_ids)
+        user_ids = {picture.user_id for picture in pictures}
+        users = [user for user in users if user.id in user_ids]
+
+    return [user for user in users if user.pictures.count() > 0]
 
 
 def search_comments(keywords: List[str]) -> List[Comment]:
