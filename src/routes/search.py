@@ -51,6 +51,15 @@ def search_users(keywords: List[str]) -> List[User]:
 
 
 def search_comments(keywords: List[str]) -> List[Comment]:
+    """
+    Searches for comments that match the given keywords.
+
+    Args:
+        keywords (List[str]): A list of keywords to search for.
+
+    Returns:
+        List[Comment]: A list of comments that match the search criteria.
+    """
     return search(query=' '.join(keywords), model=Comment, fields=('content',))
 
 
