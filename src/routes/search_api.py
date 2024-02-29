@@ -1,6 +1,7 @@
 from datetime import datetime
 from fastapi import FastAPI
-from src.routes.search import search_pictures, search_users, search_comments
+from src.routes.search import search_pictures, search_users, search_users_with_photos, search_comments
+from src.database.models import User
 from typing import List
 from src.services.auth import Auth
 
@@ -33,6 +34,14 @@ async def search_users_endpoint(query: str, tags: List[str] = None, rating: int 
         end_date = datetime.combine(date_added, datetime.max.time())
         users = [user for user in users if start_date <= user.created_at <= end_date]
     return users
+
+
+get_current_user = Auth.get_current_user
+
+
+@app.get("/search/users/photos")
+async def search_users_with_photos_endpoint(query: str = '', picture_ids: List[int] = None, current_user: User = get_current_user):
+    return search_users_with_photos(query, picture_ids)
 
 
 @app.get("/search/comments")
