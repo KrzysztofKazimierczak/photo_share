@@ -51,6 +51,16 @@ def search_users(keywords: List[str]) -> List[User]:
 
 
 def search_users_with_photos(query: str = '', picture_ids: List[int] = None) -> List[User]:
+    """
+    Searches for users that match the given query and have added photos.
+
+    Args:
+        query (str, optional): The query string to search for in usernames.
+        picture_ids (List[int], optional): A list of picture IDs to filter by.
+
+    Returns:
+        List[User]: A list of users that match the search criteria and have added photos.
+    """
     query_params = {'username': query} if query else {}
     users = search_users(**query_params)
 
