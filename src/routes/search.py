@@ -50,6 +50,10 @@ def search_users(keywords: List[str]) -> List[User]:
     return search(query=' '.join(keywords), model=User, fields=('username', 'email'))
 
 
+def search_users_with_photos(query: str = '', picture_ids: List[int] = None) -> List[User]:
+    pass
+
+
 def search_comments(keywords: List[str]) -> List[Comment]:
     """
     Searches for comments that match the given keywords.
@@ -61,7 +65,4 @@ def search_comments(keywords: List[str]) -> List[Comment]:
         List[Comment]: A list of comments that match the search criteria.
     """
     return search(query=' '.join(keywords), model=Comment, fields=('content',))
-
-
-
 
