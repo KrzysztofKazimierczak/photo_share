@@ -22,7 +22,8 @@ def search_users(keywords: List[str]) -> List[User]:
 
 
 def search_comments(keywords: List[str]) -> List[Comment]:
-    pass
+    return search(query=' '.join(keywords), model=Comment, fields=('content',))
+
 
 
 
