@@ -12,11 +12,14 @@ def search(query: str, model: Base, fields: List[str]) -> List[Base]: # type: ig
         query = query.filter(or_(*[getattr(model, field).contains(query_part) for field in fields]))
     return query.all()
 
+
 def search_pictures(keywords_or_tags: List[str]) -> List[Picture]:
-    pass
+    return search(query=' '.join(keywords_or_tags), model=Picture, fields=('tags.name', 'description'))
+    
 
 def search_users(keywords: List[str]) -> List[User]:
     pass
+
 
 def search_comments(keywords: List[str]) -> List[Comment]:
     pass
