@@ -35,4 +35,13 @@ async def search_users_endpoint(query: str, tags: List[str] = None, rating: int 
 
 @app.get("/search/comments")
 async def search_comments_endpoint(query: str, tags: List[str] = None, rating: int = None, date_added: datetime = None):
-    pass
+    comments = search_comments(keywords=query.split())
+    if tags:
+        comments = [comment for comment in comments if any(tag.name in tags for tag in comment.tags)]
+    if rating is not None:
+        comments = [comment for comment in comments if comment.rating == rating]
+    if date_added is not None:
+        start_date = datetime.combine(date_added, datetime.min.time())
+        end_date = datetime.combine(date_added, datetime.max.time())
+        comments = [comment for comment in comments if start_date <= comment.created_at <= end_date]
+    return comments
