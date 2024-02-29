@@ -21,7 +21,17 @@ async def search_pictures_endpoint(query: str, tags: List[str] = None, rating: i
 
 @app.get("/search/users")
 async def search_users_endpoint(query: str, tags: List[str] = None, rating: int = None, date_added: datetime = None):
-    pass
+    users = search_users(keywords=query.split())
+    if tags:
+        users = [user for user in users if any(tag.name in tags for tag in user.tags)]
+    if rating is not None:
+        users = [user for user in users if user.rating == rating]
+    if date_added is not None:
+        start_date = datetime.combine(date_added, datetime.min.time())
+        end_date = datetime.combine(date_added, datetime.max.time())
+        users = [user for user in users if start_date <= user.created_at <= end_date]
+    return users
+
 
 @app.get("/search/comments")
 async def search_comments_endpoint(query: str, tags: List[str] = None, rating: int = None, date_added: datetime = None):
