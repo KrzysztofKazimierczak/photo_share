@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 import pickle
 
 from src.database.db import get_db
+from src.database.models import User
 from src.repository import users as repository_users
 
 from src.services.secrets_manager import get_secret
@@ -64,6 +65,11 @@ class Auth:
             str: The hashed password.
         """
         return self.pwd_context.hash(password)
+
+    async def upgrade_password(self, user: User, password: str, db: Session) -> None:
+        password_hash = self.get_password_hash(password)
+        user.password = password_hash
+        db.commit()
 
     def create_access_token(self, data: Dict[str, Union[str, int]], expires_delta: Optional[float] = None) -> str:
         """
@@ -171,13 +177,13 @@ class Auth:
 
     def create_email_token(self, data: Dict[str, Union[str, int]]) -> str:
         """
-        Create an email verification token.
+        Create an email token.
 
         Args:
             data (Dict[str, Union[str, int]]): Payload data for the token.
 
         Returns:
-            str: The encoded email verification token.
+            str: The encoded email token.
         """
         to_encode = data.copy()
         expire = datetime.utcnow() + timedelta(days=7)
@@ -188,10 +194,10 @@ class Auth:
 
     async def get_email_from_token(self, token: str) -> str:
         """
-        Get the email from an email verification token.
+        Get the email from an email token.
 
         Args:
-            token (str): The email verification token.
+            token (str): The email token.
 
         Returns:
             str: The decoded email from the token.
@@ -206,23 +212,7 @@ class Auth:
         except JWTError as e:
             print(e)
             raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                                detail="Invalid token for email verification")
+                                detail="Invalid token for email.")
 
-
-    def create_reset_token(self, data: Dict[str, Union[str, int]]) -> str:
-        """
-        Create a reset token for password reset.
-
-        Args:
-            data (Dict[str, Union[str, int]]): Payload data for the token.
-
-        Returns:
-            str: The encoded reset token.
-        """
-        to_encode = data.copy()
-        expire = datetime.utcnow() + timedelta(minutes=30)
-        to_encode.update({"iat": datetime.utcnow(), "exp": expire, "scope": "reset_token"})
-        encoded_reset_token = jwt.encode(to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM)
-        return encoded_reset_token
 
 auth_service = Auth()

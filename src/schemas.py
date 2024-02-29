@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel, Field, EmailStr
 
@@ -11,7 +10,6 @@ class UserModel(BaseModel):
     username: str = Field(min_length=5, max_length=16)
     email: EmailStr
     password: str = Field(min_length=6, max_length=20)
-    reset_token: Optional[str] = None
 
 
 class UserDb(BaseModel):
@@ -50,3 +48,25 @@ class RequestEmail(BaseModel):
     Schema for the request containing an email address.
     """
     email: EmailStr
+
+
+class MessageBase(BaseModel):
+    sender_id: int
+    receiver_id: int
+    content: str
+
+
+class MessageModel(MessageBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+
+class MessageResponse(MessageBase):
+    id: int
+    timestamp: datetime
+
+    class Config:
+        from_attributes = True
+
