@@ -1,6 +1,7 @@
 from datetime import datetime
 from fastapi import FastAPI
 from src.routes.search import search_pictures, search_users, search_comments
+from typing import List
 
 app = FastAPI()
 
