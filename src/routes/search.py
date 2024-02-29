@@ -18,7 +18,7 @@ def search_pictures(keywords_or_tags: List[str]) -> List[Picture]:
     
 
 def search_users(keywords: List[str]) -> List[User]:
-    pass
+    return search(query=' '.join(keywords), model=User, fields=('username', 'email'))
 
 
 def search_comments(keywords: List[str]) -> List[Comment]:
