@@ -4,10 +4,10 @@ from fastapi.testclient import TestClient
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from src.database.models import Base, Tag, User, Comment, Picture, PictureTagsAssociation
-from src.routes.search import search, search_pictures, search_users, search_users_with_photos, search_comments
+from src.database.models import Base, Tag, User, Comment, Picture, PictureTagsAssociation, Auth
+from src.routes.search import search, search_pictures, search_users, search_users_with_photos, search_comments, get_current_user
 from faker import Faker
-
+from datetime import datetime
 
 # fake database session
 fake = Faker("pl_PL")
@@ -18,8 +18,8 @@ session = Session()
 
 
 # test data
-user1 = User(username=fake.user_name(), email=fake.email(), password=fake.password())
-user2 = User(username=fake.user_name(), email=fake.email(), password=fake.password())
+user1 = User(username=fake.user_name(), email=fake.email(), password=fake.password(), rating=4, created_at=datetime.utcnow())
+user2 = User(username=fake.user_name(), email=fake.email(), password=fake.password(), rating=3, created_at=datetime.utcnow())
 session.add_all([user1, user2])
 session.commit()
 tag1 = Tag(name=fake.word())
