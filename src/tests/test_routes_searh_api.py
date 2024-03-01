@@ -6,6 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from src.database.models import Base, Tag, User, Comment, Picture, PictureTagsAssociation, Auth
 from src.routes.search import search, search_pictures, search_users, search_users_with_photos, search_comments, get_current_user
+from src.routes.search_api import search_pictures_endpoint, search_users_endpoint, search_users_with_photos_endpoint, search_comments_endpoint
 from faker import Faker
 from datetime import datetime, timedelta
 
@@ -69,4 +70,31 @@ def test_search_pictures_endpoint():
     response = client.get("/search/users/pictures", params={"date_added": start_date})
     pictures = response.json()
     assert len(pictures) == 2
+    
+    
+def test_search_users_endpoint():
+    # test searching for users by keywords
+    response = client.get("/search/users", params={"query": "test user"})
+    users = response.json()
+    assert len(users) == 1
+    assert users[0]["id"] == user1.id
+
+    # test searching for users by tags
+    response = client.get("/search/users", params={"tags": [tag1.name]})
+    users = response.json()
+    assert len(users) == 1
+    assert users[0]["id"] == user1.id
+
+    # test searching for users by rating
+    response = client.get("/search/users", params={"rating": 4})
+    users = response.json()
+    assert len(users) == 1
+    assert users[0]["id"] == user1.id
+
+    # test searching for users by date added
+    start_date = datetime.utcnow() - timedelta(days=10)
+    end_date = datetime.utcnow() + timedelta(days=10)
+    response = client.get("/search/users", params={"date_added": start_date})
+    users = response.json()
+    assert len(users) == 2
     
