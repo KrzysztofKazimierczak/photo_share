@@ -98,3 +98,15 @@ def test_search_users_endpoint():
     users = response.json()
     assert len(users) == 2
     
+
+def test_search_users_with_photos_endpoint():
+    # test searching for users with photos
+    response = client.get("/search/users/photos", params={"query": "test user"})
+    users = response.json()
+    assert len(users) == 1
+    assert users[0]["id"] == user1.id
+
+    # test searching for users with photos by picture IDs
+    response = client.get("/search/users/photos", params={"picture_ids": [picture1.id, picture2.id]})
+    users = response.json()
+    assert len(users) == 2
