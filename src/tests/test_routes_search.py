@@ -1,4 +1,5 @@
 import pytest
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import create_engine
@@ -14,6 +15,7 @@ engine = create_engine('sqlite:///:memory:', echo=False)
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
+
 
 # test data
 user1 = User(username=fake.user_name(), email=fake.email(), password=fake.password())
@@ -33,5 +35,22 @@ comment2 = Comment(user_id=user2.id, picture_id=picture2.id, content=fake.text()
 session.add_all([comment1, comment2])
 session.commit()
 
+
+# instance of the FastAPI application
+app = FastAPI()
+
+
 #  test client
 client = TestClient(app)
+
+
+def test_search():
+    # test searching for pictures by keywords
+    pictures = search_pictures(['test', 'picture'])
+    assert len(pictures) == 1
+    assert pictures[0].id == picture1.id
+
+    # test searching for pictures by tags
+    pictures = search_pictures([tag1.name])
+    assert len(pictures) == 1
+    assert pictures[0].id == picture1.id
