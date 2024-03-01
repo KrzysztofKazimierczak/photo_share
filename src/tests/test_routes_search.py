@@ -54,3 +54,28 @@ def test_search():
     pictures = search_pictures([tag1.name])
     assert len(pictures) == 1
     assert pictures[0].id == picture1.id
+
+    # test searching for users by keywords
+    users = search_users(['test', 'user'])
+    assert len(users) == 1
+    assert users[0].id == user1.id
+
+    # test searching for users by picture IDs
+    users = search_users(picture_ids=[picture1.id, picture2.id])
+    assert len(users) == 2
+    assert {user.id for user in users} == {user1.id, user2.id}
+
+    # test searching for users with photos
+    users = search_users_with_photos(query='test')
+    assert len(users) == 1
+    assert users[0].id == user1.id
+
+    # test searching for comments by keywords
+    comments = search_comments(['test', 'comment'])
+    assert len(comments) == 1
+    assert comments[0].id == comment1.id
+
+    # test searching for comments by tags
+    comments = search_comments([tag1.name])
+    assert len(comments) == 1
+    assert comments[0].id == comment1.id
