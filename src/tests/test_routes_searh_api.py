@@ -110,3 +110,17 @@ def test_search_users_with_photos_endpoint():
     response = client.get("/search/users/photos", params={"picture_ids": [picture1.id, picture2.id]})
     users = response.json()
     assert len(users) == 2
+    
+    
+def test_search_comments_endpoint():
+    # test searching for comments by keywords
+    response = client.get("/search/comments", params={"query": "test comment"})
+    comments = response.json()
+    assert len(comments) == 1
+    assert comments[0]["id"] == comment1.id
+
+    # test searching for comments by tags
+    response = client.get("/search/comments", params={"tags": [tag1.name]})
+    comments = response.json()
+    assert len(comments) == 1
+    assert comments[0]["id"] == comment1.id
