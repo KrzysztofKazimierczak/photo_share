@@ -32,3 +32,6 @@ comment1 = Comment(user_id=user1.id, picture_id=picture1.id, content=fake.text()
 comment2 = Comment(user_id=user2.id, picture_id=picture2.id, content=fake.text())
 session.add_all([comment1, comment2])
 session.commit()
+
+#  test client
+client = TestClient(app)
