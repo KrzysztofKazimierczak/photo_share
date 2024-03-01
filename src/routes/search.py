@@ -1,5 +1,5 @@
 from sqlalchemy import or_
-from src.database.models import Base, Tag, User, Comment, Picture
+from src.database.models import Base, Tag, User, Comment, Picture, PictureTagsAssociation
 from typing import List
 from datetime import datetime
 
@@ -72,9 +72,9 @@ def search_users_with_photos(query: str = '', picture_ids: List[int] = None) -> 
     return [user for user in users if user.pictures.count() > 0]
 
 
-def search_comments(keywords: List[str]) -> List[Comment]:
+def search_comments(keywords_or_tags: List[str]) -> List[Comment]:
     """
-    Searches for comments that match the given keywords.
+    Searches for comments that match the given keywords or Tags.
 
     Args:
         keywords (List[str]): A list of keywords to search for.
@@ -82,5 +82,7 @@ def search_comments(keywords: List[str]) -> List[Comment]:
     Returns:
         List[Comment]: A list of comments that match the search criteria.
     """
-    return search(query=' '.join(keywords), model=Comment, fields=('content',))
+    tags = Tag.query.filter(Tag.name.in_(tags)).all()
+    comments = Comment.query.join(Picture).join(PictureTagsAssociation).join(Tag).filter(Tag.id.in_([tag.id for tag in tags])).all()
+    return comments
 
