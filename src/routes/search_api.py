@@ -40,7 +40,7 @@ get_current_user = Auth.get_current_user
 
 
 @app.get("/search/users/photos")
-async def search_users_with_photos_endpoint(query: str = '', picture_ids: List[int] = None, current_user: User = Depends(Auth.get_current_user)):
+async def search_users_with_photos_endpoint(query: str = '', picture_ids: List[int] = None, current_user: User = get_current_user):
     users = search_users(keywords=query.split())
     if picture_ids:
         pictures = Picture.query.filter(Picture.id.in_(picture_ids)).all()
